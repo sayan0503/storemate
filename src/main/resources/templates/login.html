@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StoreMate - Login</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+            min-height: 100vh;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Navbar */
+
+        .navbar {
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            font-weight: normal;
+        }
+
+        .register-link {
+            color: #4b5563;
+            font-size: 15px;
+        }
+
+        .register-link:hover {
+            color: #111827;
+        }
+
+        /* Login Section */
+
+        .login-section {
+            min-height: calc(100vh - 72px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px 20px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 460px;
+        }
+
+        .login-heading {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-heading h1 {
+            font-size: 34px;
+            margin-bottom: 10px;
+        }
+
+        .login-heading p {
+            color: #6b7280;
+            font-size: 15px;
+        }
+
+        /* Card */
+
+        .login-card {
+            background: white;
+            padding: 35px;
+            border-radius: 14px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.07);
+        }
+
+        /* Form */
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: #111827;
+        }
+
+        /* Login Button */
+
+        .login-button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 5px;
+            border: none;
+            border-radius: 8px;
+            background: #111827;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .login-button:hover {
+            background: #374151;
+        }
+
+        /* Register */
+
+        .register-text {
+            text-align: center;
+            margin-top: 22px;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .register-text a {
+            color: #111827;
+            font-weight: bold;
+        }
+
+        /* Messages */
+
+        .message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .success-message {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        /* Mobile */
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                padding: 0 5%;
+            }
+
+            .register-link {
+                display: none;
+            }
+
+            .login-section {
+                padding: 30px 15px;
+            }
+
+            .login-card {
+                padding: 25px 20px;
+            }
+
+            .login-heading h1 {
+                font-size: 29px;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+<!-- Navbar -->
+
+<header class="navbar">
+
+    <a href="/" class="logo">
+        Store<span>Mate</span>
+    </a>
+
+    <a href="/GoRegister" class="register-link">
+        Don't have an account? Register
+    </a>
+
+</header>
+
+
+<!-- Login Section -->
+
+<section class="login-section">
+
+    <div class="login-container">
+
+
+        <!-- Heading -->
+
+        <div class="login-heading">
+
+            <h1>
+                Welcome back
+            </h1>
+
+            <p>
+                Login to manage your store with StoreMate.
+            </p>
+
+        </div>
+
+
+        <!-- Login Card -->
+
+        <div class="login-card">
+
+
+            <!-- Error message -->
+
+            <div
+                th:if="${error}"
+                class="message error-message"
+                th:text="${error}">
+            </div>
+
+
+            <!-- Success message -->
+
+            <div
+                th:if="${success}"
+                class="message success-message"
+                th:text="${success}">
+            </div>
+
+
+            <!-- Login Form -->
+
+            <form
+                th:action="@{/loginUser}" th:object="${User}" method="post">
+
+
+                <!-- Email -->
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        th:field="*{email}"
+                        placeholder="Enter your email"
+                        required>
+
+                </div>
+
+
+                <!-- Password -->
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        th:field="*{password}"
+                        placeholder="Enter your password"
+                        required>
+
+                </div>
+
+
+                <!-- Login -->
+
+                <button
+                    type="submit"
+                    class="login-button">
+
+                    Login
+
+                </button>
+
+            </form>
+
+
+            <!-- Register -->
+
+            <div class="register-text">
+
+                Don't have an account?
+
+                <a href="/GoRegister">
+                    Create an account
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</section>
+
+
+</body>
+
+</html>

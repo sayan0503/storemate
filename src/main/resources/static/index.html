@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StoreMate - Smart Store Management</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Navbar */
+
+        .navbar {
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            font-weight: normal;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .login-btn {
+            padding: 10px 20px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+        }
+
+        .register-btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            background: #111827;
+            color: white;
+        }
+
+        /* Hero */
+
+        .hero {
+            min-height: 620px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 60px;
+            padding: 80px 7%;
+        }
+
+        .hero-content {
+            max-width: 650px;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            padding: 7px 14px;
+            background: #e5e7eb;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: 58px;
+            line-height: 1.1;
+            margin-bottom: 25px;
+        }
+
+        .hero h1 span {
+            font-weight: normal;
+        }
+
+        .hero p {
+            font-size: 19px;
+            line-height: 1.7;
+            color: #6b7280;
+            margin-bottom: 35px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .primary-btn {
+            padding: 14px 26px;
+            background: #111827;
+            color: white;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .secondary-btn {
+            padding: 14px 26px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background: white;
+        }
+
+        /* Dashboard Preview */
+
+        .dashboard-preview {
+            width: 470px;
+            background: white;
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.10);
+        }
+
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .preview-title {
+            font-weight: bold;
+        }
+
+        .preview-user {
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            padding: 18px;
+            background: #f5f7fb;
+            border-radius: 10px;
+        }
+
+        .stat-card p {
+            color: #6b7280;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .stat-card h3 {
+            font-size: 22px;
+        }
+
+        .inventory-preview {
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .inventory-title {
+            padding: 15px;
+            font-weight: bold;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .product-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 13px 15px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+
+        .product-row:last-child {
+            border-bottom: none;
+        }
+
+        /* Features */
+
+        .features {
+            padding: 90px 7%;
+            background: white;
+            text-align: center;
+        }
+
+        .section-heading {
+            max-width: 650px;
+            margin: auto;
+        }
+
+        .section-heading h2 {
+            font-size: 38px;
+            margin-bottom: 15px;
+        }
+
+        .section-heading p {
+            color: #6b7280;
+            line-height: 1.7;
+        }
+
+        .feature-grid {
+            max-width: 1100px;
+            margin: 50px auto 0;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .feature-card {
+            padding: 35px 25px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            text-align: left;
+        }
+
+        .feature-icon {
+            font-size: 30px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        /* How it works */
+
+        .how-it-works {
+            padding: 90px 7%;
+            text-align: center;
+        }
+
+        .steps {
+            max-width: 1000px;
+            margin: 50px auto 0;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .step {
+            position: relative;
+            padding: 30px;
+        }
+
+        .step-number {
+            width: 45px;
+            height: 45px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: #111827;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .step h3 {
+            margin-bottom: 10px;
+        }
+
+        .step p {
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        /* CTA */
+
+        .cta {
+            margin: 40px 7% 80px;
+            padding: 70px 30px;
+            text-align: center;
+            background: #111827;
+            color: white;
+            border-radius: 18px;
+        }
+
+        .cta h2 {
+            font-size: 38px;
+            margin-bottom: 15px;
+        }
+
+        .cta p {
+            color: #d1d5db;
+            margin-bottom: 30px;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 14px 28px;
+            background: white;
+            color: #111827;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        /* Footer */
+
+        footer {
+            padding: 30px 7%;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+
+        @media (max-width: 900px) {
+
+            .hero {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .dashboard-preview {
+                width: 100%;
+                max-width: 500px;
+            }
+
+            .feature-grid,
+            .steps {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                padding: 0 5%;
+            }
+
+            .login-btn {
+                display: none;
+            }
+
+            .hero {
+                padding: 60px 5%;
+            }
+
+            .hero h1 {
+                font-size: 42px;
+            }
+
+            .features,
+            .how-it-works {
+                padding: 70px 5%;
+            }
+
+            .cta {
+                margin-left: 5%;
+                margin-right: 5%;
+            }
+
+            footer {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+
+<header class="navbar">
+
+    <a href="/" class="logo">
+        Store<span>Mate</span>
+    </a>
+
+    <div class="nav-buttons">
+
+        <a href="/goLogin" class="login-btn">
+            Login
+        </a>
+
+        <a href="/GoRegister" class="register-btn">
+            Register
+        </a>
+
+    </div>
+
+</header>
+
+
+<!-- Hero -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <div class="hero-tag">
+            Smart Store Management
+        </div>
+
+        <h1>
+            Manage your store.
+            <span>Simply.</span>
+        </h1>
+
+        <p>
+            StoreMate helps you manage your inventory, record sales,
+            track revenue and keep your store organized — all from
+            one simple platform.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="/GoRegister" class="primary-btn">
+                Get Started
+            </a>
+
+            <a href="#features" class="secondary-btn">
+                Learn More
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- Dashboard preview -->
+
+    <div class="dashboard-preview">
+
+        <div class="preview-header">
+
+            <div class="preview-title">
+                Store Dashboard
+            </div>
+
+            <div class="preview-user">
+                Sayan Electronics
+            </div>
+
+        </div>
+
+
+        <div class="stats">
+
+            <div class="stat-card">
+                <p>Total Products</p>
+                <h3>128</h3>
+            </div>
+
+            <div class="stat-card">
+                <p>Today's Sales</p>
+                <h3>₹8,450</h3>
+            </div>
+
+            <div class="stat-card">
+                <p>Low Stock</p>
+                <h3>7</h3>
+            </div>
+
+            <div class="stat-card">
+                <p>Revenue</p>
+                <h3>₹2.4L</h3>
+            </div>
+
+        </div>
+
+
+        <div class="inventory-preview">
+
+            <div class="inventory-title">
+                Recent Inventory
+            </div>
+
+            <div class="product-row">
+                <span>Keyboard</span>
+                <strong>20</strong>
+            </div>
+
+            <div class="product-row">
+                <span>Mouse</span>
+                <strong>15</strong>
+            </div>
+
+            <div class="product-row">
+                <span>Monitor</span>
+                <strong>8</strong>
+            </div>
+
+            <div class="product-row">
+                <span>USB Cable</span>
+                <strong>50</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- Features -->
+
+<section class="features" id="features">
+
+    <div class="section-heading">
+
+        <h2>
+            Everything you need to manage your store
+        </h2>
+
+        <p>
+            StoreMate brings the essential parts of store management
+            together in one place.
+        </p>
+
+    </div>
+
+
+    <div class="feature-grid">
+
+        <div class="feature-card">
+
+            <div class="feature-icon">📦</div>
+
+            <h3>
+                Inventory Management
+            </h3>
+
+            <p>
+                Keep track of your products, stock quantities,
+                cost prices and selling prices in one place.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon">💰</div>
+
+            <h3>
+                Sales Management
+            </h3>
+
+            <p>
+                Record sales easily and automatically deduct
+                sold quantities from your inventory.
+            </p>
+
+        </div>
+
+
+        <div class="feature-card">
+
+            <div class="feature-icon">📊</div>
+
+            <h3>
+                Revenue & Reports
+            </h3>
+
+            <p>
+                Track your sales and revenue to understand
+                how your store is performing.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- How it works -->
+
+<section class="how-it-works">
+
+    <div class="section-heading">
+
+        <h2>
+            How StoreMate works
+        </h2>
+
+        <p>
+            Start managing your store in just a few simple steps.
+        </p>
+
+    </div>
+
+
+    <div class="steps">
+
+        <div class="step">
+
+            <div class="step-number">
+                1
+            </div>
+
+            <h3>
+                Create your store
+            </h3>
+
+            <p>
+                Register an account and create your store
+                from your dashboard.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">
+                2
+            </div>
+
+            <h3>
+                Add your products
+            </h3>
+
+            <p>
+                Add products with their cost price,
+                selling price and available stock.
+            </p>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="step-number">
+                3
+            </div>
+
+            <h3>
+                Manage your sales
+            </h3>
+
+            <p>
+                Record sales and let StoreMate automatically
+                update your inventory.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- CTA -->
+
+<section class="cta">
+
+    <h2>
+        Ready to manage your store?
+    </h2>
+
+    <p>
+        Create your StoreMate account and get started.
+    </p>
+
+    <a href="/goLogin" class="cta-btn">
+        Create Your Store
+    </a>
+
+</section>
+
+
+<!-- Footer -->
+
+<footer>
+
+    <div>
+        © 2026 StoreMate
+    </div>
+
+    <div>
+        Smart Store Management
+    </div>
+
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StoreMate - Store</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+            min-height: 100vh;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Navbar */
+
+        .navbar {
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            font-weight: normal;
+        }
+
+        .back-link {
+            color: #4b5563;
+            font-size: 15px;
+        }
+
+        .back-link:hover {
+            color: #111827;
+        }
+
+        /* Main */
+
+        .main {
+            max-width: 1100px;
+            margin: auto;
+            padding: 45px 30px;
+        }
+
+        .store-heading {
+            margin-bottom: 35px;
+        }
+
+        .store-heading h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .store-heading p {
+            color: #6b7280;
+            font-size: 15px;
+        }
+
+        /* Action Cards */
+
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .action-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            padding: 30px;
+            min-height: 190px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: 0.2s;
+        }
+
+        .action-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .action-card h2 {
+            font-size: 21px;
+            margin-bottom: 10px;
+        }
+
+        .action-card p {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .action-button {
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            padding: 12px;
+            border-radius: 8px;
+            background: #111827;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 25px;
+        }
+
+        .action-button:hover {
+            background: #374151;
+        }
+
+        .disabled-button {
+            background: #e5e7eb;
+            color: #6b7280;
+            cursor: default;
+        }
+
+        .disabled-button:hover {
+            background: #e5e7eb;
+        }
+
+        /* Responsive */
+
+        @media (max-width: 800px) {
+
+            .actions {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                padding: 0 5%;
+            }
+
+            .back-link {
+                font-size: 14px;
+            }
+
+            .main {
+                padding: 30px 20px;
+            }
+
+            .store-heading h1 {
+                font-size: 28px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <a href="/dashboard" class="logo">
+        Store<span>Mate</span>
+    </a>
+
+    <a href="/dashboard" class="back-link">
+        ← Back to Dashboard
+    </a>
+
+</header>
+
+
+<main class="main">
+
+    <div class="store-heading">
+
+        <h1 th:text="${store.name}">
+            Store Name
+        </h1>
+
+        <p>
+            Manage your store from here.
+        </p>
+
+    </div>
+
+
+    <div class="actions">
+
+        <!-- Inventory -->
+
+        <div class="action-card">
+
+            <div>
+
+                <h2>
+                    Inventory
+                </h2>
+
+                <p>
+                    Add, update and manage the products and stock
+                    available in your store.
+                </p>
+
+            </div>
+
+            <a class="action-button"
+               th:href="@{/store/{id}/inventory(id=${store.id})}">
+                Manage Inventory
+            </a>
+
+        </div>
+
+
+        <!-- Start Selling -->
+
+        <div class="action-card">
+
+            <div>
+
+                <h2>
+                    Start Selling
+                </h2>
+
+                <p>
+                    Create sales and automatically update your
+                    inventory when products are sold.
+                </p>
+
+            </div>
+
+            <a class="action-button disabled-button"
+               href="#">
+                Start Selling
+            </a>
+
+        </div>
+
+
+        <!-- Analytics -->
+
+        <div class="action-card">
+
+            <div>
+
+                <h2>
+                    View Analytics
+                </h2>
+
+                <p>
+                    View your sales, revenue, profit and other
+                    store performance information.
+                </p>
+
+            </div>
+
+            <a class="action-button disabled-button"
+               href="#">
+                View Analytics
+            </a>
+
+        </div>
+
+    </div>
+
+</main>
+
+</body>
+
+</html>

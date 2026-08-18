@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StoreMate - Inventory</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+            min-height: 100vh;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Navbar */
+
+        .navbar {
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            font-weight: normal;
+        }
+
+        .back-link {
+            color: #4b5563;
+            font-size: 15px;
+        }
+
+        .back-link:hover {
+            color: #111827;
+        }
+
+        /* Main */
+
+        .main {
+            max-width: 1200px;
+            margin: auto;
+            padding: 45px 30px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-heading h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .page-heading p {
+            color: #6b7280;
+            font-size: 15px;
+        }
+
+        /* Add Product Button */
+
+        .add-product-button {
+            padding: 12px 20px;
+            border-radius: 8px;
+            background: #111827;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .add-product-button:hover {
+            background: #374151;
+        }
+
+        /* Inventory Card */
+
+        .inventory-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        /* Table */
+
+        .inventory-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .inventory-table th {
+            text-align: left;
+            padding: 17px 20px;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 13px;
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        .inventory-table td {
+            padding: 18px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+
+        .inventory-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .product-name {
+            font-weight: 600;
+        }
+
+        .product-id {
+            color: #6b7280;
+        }
+
+        .stock {
+            font-weight: 600;
+        }
+
+        /* Actions */
+
+        .edit-button {
+            padding: 7px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background: white;
+            color: #374151;
+            font-size: 13px;
+            margin-right: 5px;
+        }
+
+        .edit-button:hover {
+            background: #f3f4f6;
+        }
+
+        .delete-button {
+            padding: 7px 12px;
+            border: none;
+            border-radius: 6px;
+            background: #fee2e2;
+            color: #991b1b;
+            font-size: 13px;
+        }
+
+        .delete-button:hover {
+            background: #fecaca;
+        }
+
+        /* Empty Inventory */
+
+        .empty-inventory {
+            text-align: center;
+            padding: 70px 20px;
+        }
+
+        .empty-inventory h2 {
+            font-size: 21px;
+            margin-bottom: 10px;
+        }
+
+        .empty-inventory p {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        /* Responsive */
+
+        @media (max-width: 800px) {
+
+            .main {
+                padding: 30px 15px;
+            }
+
+            .page-header {
+                align-items: flex-start;
+                gap: 20px;
+            }
+
+            .inventory-card {
+                overflow-x: auto;
+            }
+
+            .inventory-table {
+                min-width: 850px;
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                padding: 0 5%;
+            }
+
+            .back-link {
+                font-size: 14px;
+            }
+
+            .page-header {
+                flex-direction: column;
+            }
+
+            .add-product-button {
+                width: 100%;
+                text-align: center;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <a href="/dashboard" class="logo">
+        Store<span>Mate</span>
+    </a>
+
+    <a th:href="@{/store/{id}(id=${store.id})}" class="back-link">
+        ← Back to Store
+    </a>
+
+</header>
+
+
+<main class="main">
+
+    <div class="page-header">
+
+        <div class="page-heading">
+
+            <h1>
+                Inventory
+            </h1>
+
+            <p>
+                <span th:text="${store.name}">
+                    Store Name
+                </span>
+                · Manage your products and stock
+            </p>
+
+        </div>
+
+        <a th:href="@{/store/{id}/inventory/add(id=${store.id})}"
+           class="add-product-button">
+            + Add Product
+        </a>
+
+    </div>
+
+
+    <div class="inventory-card">
+
+        <!-- Products exist -->
+
+        <table class="inventory-table"
+               th:if="${products != null and !#lists.isEmpty(products)}">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Product ID
+                    </th>
+
+                    <th>
+                        Product
+                    </th>
+
+                    <th>
+                        Stock
+                    </th>
+
+                    <th>
+                        Cost Price
+                    </th>
+
+                    <th>
+                        Selling Price
+                    </th>
+
+                    <th>
+                        Actions
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                <tr th:each="product : ${products}">
+
+                    <td class="product-id"
+                        th:text="${product.id}">
+                        1001
+                    </td>
+
+                    <td class="product-name"
+                        th:text="${product.name}">
+                        Product Name
+                    </td>
+
+                    <td class="stock"
+                        th:text="${product.quantity}">
+                        50
+                    </td>
+
+                    <td>
+                        ₹<span th:text="${product.costPrice}">
+                            100
+                        </span>
+                    </td>
+
+                    <td>
+                        ₹<span th:text="${product.sellPrice}">
+                            120
+                        </span>
+                    </td>
+
+                    <td>
+
+                        <a th:href="@{/store/{storeId}/inventory/edit/{productId}(storeId=${store.id}, productId=${product.id})}"
+                           class="edit-button">
+                            Edit
+                        </a>
+
+                        <a th:href="@{/store/{storeId}/inventory/delete/{productId}(storeId=${store.id}, productId=${product.id})}"
+                           class="delete-button">
+                            Delete
+                        </a>
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+
+        <!-- No products -->
+
+        <div class="empty-inventory"
+             th:if="${products == null or #lists.isEmpty(products)}">
+
+            <h2>
+                No products yet
+            </h2>
+
+            <p>
+                Add your first product to start managing your inventory.
+            </p>
+
+            <a th:href="@{/store/{id}/inventory/add(id=${store.id})}"
+               class="add-product-button">
+                + Add Product
+            </a>
+
+        </div>
+
+    </div>
+
+</main>
+
+</body>
+
+</html>

@@ -36,7 +36,7 @@ public class UserController {
 			boolean status = service.register(u);
 			try {
 				if(status) {
-					return "redirect:/login";
+					return "redirect:/goLogin";
 				}
 				else {
 					model.addAttribute("error", "Registration Unsuccessfull!!!");
@@ -71,12 +71,6 @@ public class UserController {
 		}
 	}
 	
-	@GetMapping("/dashboard")
-	public String dashboard(HttpServletRequest req, Model model) {
-		HttpSession session = req.getSession(false);
-		session.getAttribute("user");
-		return "dashboard";
-	}
 	
 	@GetMapping("/logout")
 	public String logout(HttpServletRequest req) {

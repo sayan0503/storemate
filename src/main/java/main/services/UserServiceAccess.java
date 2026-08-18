@@ -22,7 +22,9 @@ public class UserServiceAccess implements UserService{
 			String encodedPassword = encoder.encode(u.getPassword());
 			u.setPassword(encodedPassword);
 			repo.save(u);
-			// 1-12345
+			// 1 - 12345
+			// 2 - password
+			// 3 - pass123
 			return true;
 		}catch(Exception e) {
 			e.printStackTrace();

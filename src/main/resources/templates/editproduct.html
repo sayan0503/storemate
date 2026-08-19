@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StoreMate - Edit Product</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+            min-height: 100vh;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Navbar */
+
+        .navbar {
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            font-weight: normal;
+        }
+
+        .back-link {
+            color: #4b5563;
+            font-size: 15px;
+        }
+
+        .back-link:hover {
+            color: #111827;
+        }
+
+        /* Section */
+
+        .edit-section {
+            min-height: calc(100vh - 72px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px 20px;
+        }
+
+        .edit-container {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .heading {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .heading h1 {
+            font-size: 34px;
+            margin-bottom: 10px;
+        }
+
+        .heading p {
+            color: #6b7280;
+            font-size: 15px;
+        }
+
+        /* Card */
+
+        .edit-card {
+            background: white;
+            padding: 35px;
+            border-radius: 14px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.07);
+        }
+
+        /* Product Information */
+
+        .product-info {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 25px;
+        }
+
+        .product-info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .product-info-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-label {
+            color: #6b7280;
+        }
+
+        .info-value {
+            font-weight: 600;
+        }
+
+        /* Form */
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #111827;
+        }
+
+        .update-button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 5px;
+            border: none;
+            border-radius: 8px;
+            background: #111827;
+            color: white;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .update-button:hover {
+            background: #374151;
+        }
+
+        /* Error */
+
+        .message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* Mobile */
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                padding: 0 5%;
+            }
+
+            .back-link {
+                display: none;
+            }
+
+            .edit-section {
+                padding: 30px 15px;
+            }
+
+            .edit-card {
+                padding: 25px 20px;
+            }
+
+            .heading h1 {
+                font-size: 29px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <a href="/dashboard" class="logo">
+        Store<span>Mate</span>
+    </a>
+
+    <a th:href="@{/store/{id}/inventory(id=${store.id})}"
+       class="back-link">
+        ← Back to Inventory
+    </a>
+
+</header>
+
+
+<section class="edit-section">
+
+    <div class="edit-container">
+
+        <div class="heading">
+
+            <h1>
+                Edit Product
+            </h1>
+
+            <p>
+                Update the product information
+            </p>
+
+        </div>
+
+
+        <div class="edit-card">
+
+            <div th:if="${error}"
+                 class="message error-message"
+                 th:text="${error}">
+            </div>
+
+
+            <!-- Product Information -->
+
+            <div class="product-info">
+
+                <div class="product-info-row">
+
+                    <span class="info-label">
+                        Product ID
+                    </span>
+
+                    <span class="info-value"
+                          th:text="${product.id}">
+                        1001
+                    </span>
+
+                </div>
+
+
+                <div class="product-info-row">
+
+                    <span class="info-label">
+                        Product Name
+                    </span>
+
+                    <span class="info-value"
+                          th:text="${product.name}">
+                        Product Name
+                    </span>
+
+                </div>
+
+
+                <div class="product-info-row">
+
+                    <span class="info-label">
+                        Store
+                    </span>
+
+                    <span class="info-value"
+                          th:text="${store.name}">
+                        Store Name
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- Edit Form -->
+
+            <form th:action="@{/store/{storeId}/inventory/edit/{productId}(storeId=${store.id}, productId=${product.id})}"
+                  th:object="${product}"
+                  method="post">
+
+
+                <!-- Quantity -->
+
+                <div class="form-group">
+
+                    <label for="quantity">
+                        Quantity
+                    </label>
+
+                    <input type="number"
+                           id="quantity"
+                           th:field="*{quantity}"
+                           min="0"
+                           required>
+
+                </div>
+
+
+                <!-- Cost Price -->
+
+                <div class="form-group">
+
+                    <label for="costPrice">
+                        Cost Price
+                    </label>
+
+                    <input type="number"
+                           id="costPrice"
+                           th:field="*{costPrice}"
+                           min="0"
+                           step="0.01"
+                           required>
+
+                </div>
+
+
+                <!-- Selling Price -->
+
+                <div class="form-group">
+
+                    <label for="sellPrice">
+                        Selling Price
+                    </label>
+
+                    <input type="number"
+                           id="sellPrice"
+                           th:field="*{sellPrice}"
+                           min="0"
+                           step="0.01"
+                           required>
+
+                </div>
+
+
+                <button type="submit"
+                        class="update-button">
+                    Update Product
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+</body>
+
+</html>

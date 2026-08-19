@@ -192,6 +192,17 @@
             margin-bottom: 25px;
         }
 
+		.message {
+		    padding: 12px;
+		    border-radius: 8px;
+		    margin-bottom: 20px;
+		    font-size: 14px;
+		}
+
+		.error-message {
+		    background: #fee2e2;
+		    color: #991b1b;
+		 }
         /* Responsive */
 
         @media (max-width: 800px) {
@@ -289,6 +300,10 @@
         <table class="inventory-table"
                th:if="${products != null and !#lists.isEmpty(products)}">
 
+			<div th:if="${error}"
+			        class="message error-message"
+			        th:text="${error}">
+			</div>
             <thead>
 
                 <tr>

@@ -381,7 +381,7 @@
                         Total Products
                     </p>
 
-                    <h2>
+                    <h2 th:text="${products != null ? #lists.size(products) : 0}">
                         0
                     </h2>
 

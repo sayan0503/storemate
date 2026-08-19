@@ -31,4 +31,36 @@ public class ProductServiceAccess implements ProductService{
 		return repo.findAllByStore(s);
 	}
 
+	@Override
+	public boolean deleteProduct(Long id) {
+		try {
+			repo.deleteById(id);
+			return true;
+		}catch(Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	@Override
+	public List<Products> getAll() {
+		return repo.findAll();
+	}
+
+	@Override
+	public Products getProducts(Long id) {
+		return repo.findById(id).orElse(null);
+	}
+
+	@Override
+	public boolean updateProduct(Products p) {
+		try {
+			repo.save(p);
+			return true;
+		}catch(Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
 }

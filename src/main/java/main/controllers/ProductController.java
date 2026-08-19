@@ -81,5 +81,64 @@ public class ProductController {
 			model.addAttribute("error", "Something went wrong! Product could not be added!!");
 			return "addproduct";
 		}
-	}	
+	}
+	
+	@GetMapping("/store/{storeId}/inventory/delete/{productId}")
+	public String delete(Model model, HttpServletRequest req, @PathVariable Long productId, @PathVariable long storeId) {
+		HttpSession session = req.getSession(false);
+		User u = (User)session.getAttribute("user");
+		if(u==null) {
+			return "redirect:/goLogin";
+		}
+		boolean status = service.deleteProduct(productId);
+		if(status) {
+			return "redirect:/store/"+storeId+"/inventory";
+		}
+		else {
+			model.addAttribute("error", "Something went wrong! Product could not be deleted!!");
+			return "redirect:/store/"+storeId+"/inventory";
+		}
+	}
+	
+	@GetMapping("/store/{storeId}/inventory/edit/{productId}")
+	public String editpage(Model model, HttpServletRequest req, @PathVariable Long productId, @PathVariable long storeId) {
+		HttpSession session = req.getSession(false);
+		User u = (User)session.getAttribute("user");
+		if(u==null) {
+			return "redirect:/goLogin";
+		}
+		
+		Stores s = storeService.getStoresbyId(storeId);
+		Products p = service.getProducts(productId);
+		model.addAttribute("store", s);
+		model.addAttribute("product", p);
+		
+		return "editproduct";
+	}
+	
+	@PostMapping("/store/{storeId}/inventory/edit/{productId}")
+	public String edit(Model model, HttpServletRequest req, @PathVariable Long productId, @PathVariable long storeId, @ModelAttribute("product") Products p) {
+		HttpSession session = req.getSession(false);
+		User u = (User)session.getAttribute("user");
+		if(u==null) {
+			return "redirect:/goLogin";
+		}
+		
+		Products existingProduct = service.getProducts(productId);
+		if (existingProduct == null) {
+		    return "redirect:/store/" + storeId + "/inventory";
+		}
+		existingProduct.setQuantity(p.getQuantity());
+		existingProduct.setCostPrice(p.getCostPrice());
+		existingProduct.setSellPrice(p.getSellPrice());
+		
+		boolean status = service.updateProduct(existingProduct);
+		if(status) {
+			return "redirect:/store/"+storeId+"/inventory";
+		}
+		else {
+			model.addAttribute("error", "Something went wrong! Product could not be updated!!");
+			return "redirect:/store/"+storeId+"/inventory/edit/"+productId;
+		} 
+	}
 }

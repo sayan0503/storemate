@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StoreMate - Start Selling</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+            min-height: 100vh;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Navbar */
+
+        .navbar {
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            font-weight: normal;
+        }
+
+        .back-link {
+            color: #4b5563;
+            font-size: 15px;
+        }
+
+        .back-link:hover {
+            color: #111827;
+        }
+
+        /* Main */
+
+        .main {
+            max-width: 1200px;
+            margin: auto;
+            padding: 45px 30px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-heading h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .page-heading p {
+            color: #6b7280;
+            font-size: 15px;
+        }
+
+        /* Sale Card */
+
+        .sale-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        /* Table */
+
+        .sale-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .sale-table th {
+            text-align: left;
+            padding: 17px 20px;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 13px;
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        .sale-table td {
+            padding: 14px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+
+        .sale-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Inputs */
+
+        .product-id-input,
+        .quantity-input {
+            width: 100%;
+            padding: 9px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .product-id-input:focus,
+        .quantity-input:focus {
+            border-color: #111827;
+        }
+
+        .product-name {
+            font-weight: 600;
+        }
+
+        .product-price {
+            font-weight: 600;
+        }
+
+        .row-total {
+            font-weight: 600;
+        }
+
+        /* Remove */
+
+        .remove-button {
+            padding: 7px 12px;
+            border: none;
+            border-radius: 6px;
+            background: #fee2e2;
+            color: #991b1b;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .remove-button:hover {
+            background: #fecaca;
+        }
+
+        /* Bottom */
+
+        .sale-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 22px 20px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .add-product-button {
+            padding: 12px 20px;
+            border-radius: 8px;
+            background: white;
+            border: 1px solid #d1d5db;
+            color: #374151;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .add-product-button:hover {
+            background: #f3f4f6;
+        }
+
+        .total-section {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .total-label {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .total-amount {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .sell-button {
+            padding: 13px 28px;
+            border: none;
+            border-radius: 8px;
+            background: #111827;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .sell-button:hover {
+            background: #374151;
+        }
+
+        .sell-button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        /* Empty */
+
+        .empty-sale {
+            text-align: center;
+            padding: 70px 20px;
+            color: #6b7280;
+        }
+
+        .empty-sale h2 {
+            color: #1f2937;
+            font-size: 21px;
+            margin-bottom: 10px;
+        }
+
+        /* Error */
+
+        .product-error {
+            color: #991b1b;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        /* Responsive */
+
+        @media (max-width: 800px) {
+
+            .main {
+                padding: 30px 15px;
+            }
+
+            .sale-card {
+                overflow-x: auto;
+            }
+
+            .sale-table {
+                min-width: 900px;
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                padding: 0 5%;
+            }
+
+            .back-link {
+                font-size: 14px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .sale-bottom {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 20px;
+            }
+
+            .total-section {
+                justify-content: space-between;
+            }
+
+            .add-product-button,
+            .sell-button {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <a href="/dashboard" class="logo">
+        Store<span>Mate</span>
+    </a>
+
+    <a th:href="@{/store/{id}(id=${store.id})}" class="back-link">
+        ← Back to Store
+    </a>
+
+</header>
+
+
+<main class="main">
+
+    <div class="page-header">
+
+        <div class="page-heading">
+
+            <h1>
+                Start Selling
+            </h1>
+
+            <p>
+                <span th:text="${store.name}">
+                    Store Name
+                </span>
+                · Create a new sale
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="sale-card">
+
+        <table class="sale-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Product ID
+                    </th>
+
+                    <th>
+                        Product
+                    </th>
+
+                    <th>
+                        Quantity
+                    </th>
+
+                    <th>
+                        Price
+                    </th>
+
+                    <th>
+                        Total
+                    </th>
+
+                    <th>
+                        Action
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="saleTableBody">
+
+                <!-- Product rows will be added here -->
+
+            </tbody>
+
+        </table>
+
+
+        <div id="emptySale" class="empty-sale">
+
+            <h2>
+                No products added
+            </h2>
+
+            <p>
+                Click "Add Product to Sell" to start creating the sale.
+            </p>
+
+        </div>
+
+
+        <div class="sale-bottom">
+
+            <button type="button"
+                    class="add-product-button"
+                    onclick="addProductRow()">
+
+                + Add Product to Sell
+
+            </button>
+
+
+            <div class="total-section">
+
+                <div>
+
+                    <span class="total-label">
+                        Total:
+                    </span>
+
+                    <span class="total-amount">
+                        ₹<span id="grandTotal">0.00</span>
+                    </span>
+
+                </div>
+
+
+                <button type="button"
+                        class="sell-button"
+                        id="sellButton">
+
+                    SELL
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script th:inline="javascript">
+
+    const storeId = /*[[${store.id}]]*/ 0;
+
+    let rowNumber = 0;
+
+
+    function addProductRow() {
+
+        const tableBody = document.getElementById("saleTableBody");
+        const emptySale = document.getElementById("emptySale");
+
+        const row = document.createElement("tr");
+
+        row.dataset.row = rowNumber;
+
+        row.innerHTML = `
+            <td>
+                <input type="number"
+                       class="product-id-input"
+                       placeholder="Product ID"
+                       min="1"
+                       oninput="findProduct(this)">
+                <div class="product-error"></div>
+            </td>
+
+            <td class="product-name">
+                -
+            </td>
+
+            <td>
+                <input type="number"
+                       class="quantity-input"
+                       value="1"
+                       min="1"
+                       oninput="calculateRowTotal(this)">
+            </td>
+
+            <td class="product-price">
+                ₹0.00
+            </td>
+
+            <td class="row-total">
+                ₹0.00
+            </td>
+
+            <td>
+                <button type="button"
+                        class="remove-button"
+                        onclick="removeProductRow(this)">
+                    Remove
+                </button>
+            </td>
+        `;
+
+        tableBody.appendChild(row);
+
+        emptySale.style.display = "none";
+
+        rowNumber++;
+
+        row.querySelector(".product-id-input").focus();
+
+    }
+
+
+    function removeProductRow(button) {
+
+        const row = button.closest("tr");
+
+        row.remove();
+
+        updateGrandTotal();
+
+        const tableBody = document.getElementById("saleTableBody");
+
+        if (tableBody.children.length === 0) {
+
+            document.getElementById("emptySale").style.display = "block";
+
+        }
+
+        checkSellButton();
+
+    }
+
+
+    function findProduct(input) {
+
+        const row = input.closest("tr");
+
+        const productId = input.value;
+
+        const productName = row.querySelector(".product-name");
+        const productPrice = row.querySelector(".product-price");
+        const error = row.querySelector(".product-error");
+
+        if (productId === "") {
+
+            productName.textContent = "-";
+            productPrice.textContent = "₹0.00";
+            error.textContent = "";
+
+            calculateRowTotal(input);
+
+            return;
+
+        }
+
+
+        fetch("/store/" + storeId + "/sell/product/" + productId)
+
+            .then(response => {
+
+                if (!response.ok) {
+                    throw new Error("Product not found");
+                }
+
+                return response.json();
+
+            })
+
+            .then(product => {
+
+                productName.textContent = product.name;
+
+                productPrice.textContent =
+                    "₹" + Number(product.sellPrice).toFixed(2);
+
+                row.dataset.price = product.sellPrice;
+
+                row.dataset.productId = product.id;
+
+                error.textContent = "";
+
+                calculateRowTotal(input);
+
+                checkSellButton();
+
+            })
+
+            .catch(errorResponse => {
+
+                productName.textContent = "-";
+                productPrice.textContent = "₹0.00";
+
+                row.dataset.price = 0;
+                row.dataset.productId = "";
+
+                error.textContent = "Product not found";
+
+                calculateRowTotal(input);
+
+                checkSellButton();
+
+            });
+
+    }
+
+
+    function calculateRowTotal(input) {
+
+        const row = input.closest("tr");
+
+        const quantity =
+            Number(row.querySelector(".quantity-input").value) || 0;
+
+        const price =
+            Number(row.dataset.price) || 0;
+
+        const total = quantity * price;
+
+        row.querySelector(".row-total").textContent =
+            "₹" + total.toFixed(2);
+
+        updateGrandTotal();
+
+        checkSellButton();
+
+    }
+
+
+    function updateGrandTotal() {
+
+        let grandTotal = 0;
+
+        document.querySelectorAll("#saleTableBody tr").forEach(row => {
+
+            const quantity =
+                Number(row.querySelector(".quantity-input").value) || 0;
+
+            const price =
+                Number(row.dataset.price) || 0;
+
+            grandTotal += quantity * price;
+
+        });
+
+        document.getElementById("grandTotal").textContent =
+            grandTotal.toFixed(2);
+
+    }
+
+
+    function checkSellButton() {
+
+        const rows =
+            document.querySelectorAll("#saleTableBody tr");
+
+        const sellButton =
+            document.getElementById("sellButton");
+
+        if (rows.length === 0) {
+
+            sellButton.disabled = true;
+            return;
+
+        }
+
+        let valid = true;
+
+        rows.forEach(row => {
+
+            const productId = row.dataset.productId;
+
+            const quantity =
+                Number(row.querySelector(".quantity-input").value);
+
+            if (!productId || quantity <= 0) {
+                valid = false;
+            }
+
+        });
+
+        sellButton.disabled = !valid;
+
+    }
+
+</script>
+
+</body>
+
+</html>

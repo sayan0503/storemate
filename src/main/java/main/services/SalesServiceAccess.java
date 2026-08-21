@@ -34,12 +34,13 @@ public class SalesServiceAccess implements AllSalesService{
 	@Override
 	@Transactional
 	public boolean completeSell(Stores store, List<SaleProductRequest> products) {
-		try {
+		
 			Sales sale = new Sales();
 			sale.setStore(store);
 			sale.setSaleDate(LocalDateTime.now());
 			sale.setTotalAmount(BigDecimal.ZERO);
 			
+			salesRepo.save(sale);
 			BigDecimal total = BigDecimal.ZERO;
 			
 			for(SaleProductRequest request: products) {
@@ -73,9 +74,5 @@ public class SalesServiceAccess implements AllSalesService{
 			sale.setTotalAmount(total);
 			salesRepo.save(sale);
 			return true;
-		}catch(Exception e) {
-			e.printStackTrace();
-			return false;
-		}
 	}
 }

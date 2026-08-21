@@ -425,7 +425,9 @@
 
                 <button type="button"
                         class="sell-button"
-                        id="sellButton">
+                        id="sellButton"
+						onclick="completeSale()"
+						>
 
                     SELL
 
@@ -532,6 +534,46 @@
         const row = input.closest("tr");
 
         const productId = input.value;
+		
+		if (productId !== "") {
+
+		        const currentRow = input.closest("tr");
+
+		        const rows = document.querySelectorAll("#saleTableBody tr");
+
+		        let duplicate = false;
+
+		        rows.forEach(row => {
+
+		            if (row !== currentRow &&
+		                row.dataset.productId === productId) {
+
+		                duplicate = true;
+
+		            }
+
+		        });
+
+		        if (duplicate) {
+
+		            const error =
+		                currentRow.querySelector(".product-error");
+
+		            error.textContent =
+		                "This product is already added.";
+
+		            currentRow.querySelector(".product-name").textContent = "-";
+		            currentRow.querySelector(".product-price").textContent = "₹0.00";
+
+		            currentRow.dataset.price = 0;
+		            currentRow.dataset.productId = "";
+		            currentRow.dataset.stock = 0;
+
+		            calculateRowTotal(input);
+
+		            return;
+		        }
+		    }
 
         const productName = row.querySelector(".product-name");
         const productPrice = row.querySelector(".product-price");
@@ -562,24 +604,26 @@
 
             })
 
-            .then(product => {
+			.then(product => {
 
-                productName.textContent = product.name;
+			    productName.textContent = product.name;
 
-                productPrice.textContent =
-                    "₹" + Number(product.sellPrice).toFixed(2);
+			    productPrice.textContent =
+			        "₹" + Number(product.sellPrice).toFixed(2);
 
-                row.dataset.price = product.sellPrice;
+			    row.dataset.price = product.sellPrice;
 
-                row.dataset.productId = product.id;
+			    row.dataset.productId = product.id;
 
-                error.textContent = "";
+			    row.dataset.stock = product.quantity;
 
-                calculateRowTotal(input);
+			    error.textContent = "";
 
-                checkSellButton();
+			    calculateRowTotal(input);
 
-            })
+			    checkSellButton();
+
+			})
 
             .catch(errorResponse => {
 
@@ -600,26 +644,43 @@
     }
 
 
-    function calculateRowTotal(input) {
+	function calculateRowTotal(input) {
 
-        const row = input.closest("tr");
+	    const row = input.closest("tr");
 
-        const quantity =
-            Number(row.querySelector(".quantity-input").value) || 0;
+	    const quantity =
+	        Number(row.querySelector(".quantity-input").value) || 0;
 
-        const price =
-            Number(row.dataset.price) || 0;
+	    const price =
+	        Number(row.dataset.price) || 0;
 
-        const total = quantity * price;
+	    const stock =
+	        Number(row.dataset.stock) || 0;
 
-        row.querySelector(".row-total").textContent =
-            "₹" + total.toFixed(2);
+	    const error =
+	        row.querySelector(".product-error");
 
-        updateGrandTotal();
+	    if (quantity > stock && row.dataset.productId) {
 
-        checkSellButton();
+	        error.textContent =
+	            "Only " + stock + " available in stock";
 
-    }
+	    }
+	    else if (row.dataset.productId) {
+
+	        error.textContent = "";
+
+	    }
+
+	    const total = quantity * price;
+
+	    row.querySelector(".row-total").textContent =
+	        "₹" + total.toFixed(2);
+
+	    updateGrandTotal();
+
+	    checkSellButton();
+	}
 
 
     function updateGrandTotal() {
@@ -644,39 +705,135 @@
     }
 
 
-    function checkSellButton() {
+	function checkSellButton() {
 
-        const rows =
-            document.querySelectorAll("#saleTableBody tr");
+	    const rows =
+	        document.querySelectorAll("#saleTableBody tr");
 
-        const sellButton =
-            document.getElementById("sellButton");
+	    const sellButton =
+	        document.getElementById("sellButton");
 
-        if (rows.length === 0) {
+	    if (rows.length === 0) {
 
-            sellButton.disabled = true;
-            return;
+	        sellButton.disabled = true;
+	        return;
 
-        }
+	    }
 
-        let valid = true;
+	    let valid = true;
 
-        rows.forEach(row => {
+	    rows.forEach(row => {
 
-            const productId = row.dataset.productId;
+	        const productId = row.dataset.productId;
 
-            const quantity =
-                Number(row.querySelector(".quantity-input").value);
+	        const quantity =
+	            Number(row.querySelector(".quantity-input").value);
 
-            if (!productId || quantity <= 0) {
-                valid = false;
-            }
+	        const stock =
+	            Number(row.dataset.stock) || 0;
 
-        });
+	        if (!productId || quantity <= 0 || quantity > stock) {
 
-        sellButton.disabled = !valid;
+	            valid = false;
 
-    }
+	        }
+
+	    });
+
+	    sellButton.disabled = !valid;
+	}
+	
+	function completeSale() {
+
+	    const rows = document.querySelectorAll("#saleTableBody tr");
+
+	    if (rows.length === 0) {
+	        return;
+	    }
+
+	    const products = [];
+
+	    let valid = true;
+
+	    rows.forEach(row => {
+
+	        const productId = row.dataset.productId;
+
+	        const quantity =
+	            Number(row.querySelector(".quantity-input").value);
+
+	        if (!productId || quantity <= 0) {
+	            valid = false;
+	            return;
+	        }
+
+	        products.push({
+	            productId: Number(productId),
+	            quantity: quantity
+	        });
+
+	    });
+
+	    if (!valid) {
+	        alert("Please check all products and quantities.");
+	        return;
+	    }
+
+	    const saleRequest = {
+	        products: products
+	    };
+
+	    fetch("/store/" + storeId + "/sell", {
+
+	        method: "POST",
+
+	        headers: {
+	            "Content-Type": "application/json"
+	        },
+
+	        body: JSON.stringify(saleRequest)
+
+	    })
+
+	    .then(response => response.text())
+
+	    .then(result => {
+
+	        if (result === "SUCCESS") {
+
+	            alert("Sale completed successfully!");
+
+	            document.getElementById("saleTableBody").innerHTML = "";
+
+	            document.getElementById("emptySale").style.display = "block";
+
+	            document.getElementById("grandTotal").textContent = "0.00";
+
+	            document.getElementById("sellButton").disabled = true;
+
+	        }
+	        else if (result === "LOGIN") {
+
+	            window.location.href = "/goLogin";
+
+	        }
+	        else {
+
+	            alert(result);
+
+	        }
+
+	    })
+
+	    .catch(error => {
+
+	        console.error(error);
+
+	        alert("Something went wrong while completing the sale.");
+
+	    });
+
+	}
 
 </script>
 

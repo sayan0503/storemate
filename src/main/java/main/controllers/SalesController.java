@@ -47,6 +47,7 @@ public class SalesController {
 		}
 		
 		model.addAttribute("store", s);
+		model.addAttribute("request", new SaleRequest());
 		return "sell";
 	}
 	
@@ -67,7 +68,7 @@ public class SalesController {
 			return null;
 		}
 		
-		if(p.getStore().getId() != s.getId()) {
+		if(!p.getStore().getId().equals(s.getId())) {
 			return null;
 		}
 		
@@ -94,11 +95,16 @@ public class SalesController {
 		if(s==null) {
 			return "Store not found";
 		}
-		
-		boolean status = service.completeSell(s, request.getProducts());
-		if(status) {
-			return "SUCCESS";
+		try {
+			boolean status = service.completeSell(s, request.getProducts());
+			if(status) {
+				return "SUCCESS";
+			}
+			return "FAILED";
+		}catch(Exception e) {
+			return e.getMessage();
 		}
-		return "FAILED";
 	}
+	
+	
 }

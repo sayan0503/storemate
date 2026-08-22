@@ -10,4 +10,8 @@ import main.entity.Stores;
 public interface SalesRepository extends JpaRepository<Sales, Long>{
 
 	List<Sales> findAllByStoreOrderBySaleDateDesc(Stores s);
+	
+	List<Sales> findAllByStoreIdOrderBySaleDateDesc(Long id);
+	
+	long countByStoreId(Long storeId);
 }

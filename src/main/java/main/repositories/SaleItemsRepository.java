@@ -11,4 +11,6 @@ import main.entity.Sales;
 public interface SaleItemsRepository extends JpaRepository<SaleItems, Long>{
 
 	List<SaleItems> findAllBySale(Sales sale);
+	
+	List<SaleItems> findAllBySale_StoreId(Long storeId);
 }

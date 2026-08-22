@@ -63,6 +63,7 @@ public class SalesServiceAccess implements AllSalesService{
 				item.setProduct(p);
 				item.setQuantity(quantity);
 				item.setPrice(price);
+				item.setCostPrice(p.getCostPrice());
 				item.setSubTotal(subtotal);
 				
 				itemRepo.save(item);
@@ -75,4 +76,21 @@ public class SalesServiceAccess implements AllSalesService{
 			salesRepo.save(sale);
 			return true;
 	}
+
+	@Override
+	public List<Sales> getAllSales(Stores s) {
+		return salesRepo.findAllByStoreOrderBySaleDateDesc(s);
+	}
+
+	@Override
+	public Sales getSaleById(Long id) {
+		return salesRepo.findById(id).orElse(null);
+	}
+
+	@Override
+	public List<SaleItems> getAllSalesItems(Sales sale) {
+		return itemRepo.findAllBySale(sale);
+	}
+
+	
 }

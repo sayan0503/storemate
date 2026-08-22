@@ -26,6 +26,9 @@ public class SaleItems {
 	private BigDecimal price;
 	
 	@Column
+	private BigDecimal costPrice;
+	
+	@Column
 	private BigDecimal subTotal;
 	
 	@ManyToOne
@@ -35,16 +38,18 @@ public class SaleItems {
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Products product;
+	
 
 	public SaleItems() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public SaleItems(int quantity, BigDecimal price, BigDecimal subTotal, Sales sale, Products product) {
+	public SaleItems(int quantity, BigDecimal price, BigDecimal costPrice, BigDecimal subTotal, Sales sale, Products product) {
 		super();
 		this.quantity = quantity;
 		this.price = price;
+		this.costPrice = costPrice;
 		this.subTotal = subTotal;
 		this.sale = sale;
 		this.product = product;
@@ -72,6 +77,14 @@ public class SaleItems {
 
 	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+	
+	public BigDecimal getCostPrice() {
+		return costPrice;
+	}
+
+	public void setCostPrice(BigDecimal costPrice) {
+		this.costPrice = costPrice;
 	}
 
 	public BigDecimal getSubTotal() {

@@ -1,5 +1,7 @@
 package main.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import main.entity.AnalyticsData;
 import main.entity.Stores;
+import main.entity.TopSellingProduct;
 import main.entity.User;
 import main.services.AnalyticsService;
 import main.services.StoreService;
@@ -45,8 +48,11 @@ public class AnalyticsController {
         }
         
         AnalyticsData data = service.getAnalytics(storeId);
+        List<TopSellingProduct> topProducts = service.getTopSellingProducts(store);
+
         model.addAttribute("store", store);
         model.addAttribute("analytics", data);
+        model.addAttribute("topProducts", topProducts);
         
         return "analytics";
 	}

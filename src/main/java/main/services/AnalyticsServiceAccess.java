@@ -11,6 +11,7 @@ import main.entity.AnalyticsData;
 import main.entity.SaleItems;
 import main.entity.Sales;
 import main.entity.Stores;
+import main.entity.TopSellingProduct;
 import main.repositories.SaleItemsRepository;
 import main.repositories.SalesRepository;
 import main.repositories.StoreRepository;
@@ -55,7 +56,15 @@ public class AnalyticsServiceAccess implements AnalyticsService {
 		data.setRecentSales(sales.stream().limit(5).toList());
 		data.setTopProducts(items.stream().sorted((a,b) -> Integer.compare(b.getQuantity(),a.getQuantity())).limit(5).toList());
 		
+		
 		return data;
+	}
+
+
+	@Override
+	public List<TopSellingProduct> getTopSellingProducts(Stores store) {
+		
+		return itemRepo.findTopSellingProducts(store);
 	}
 
 }

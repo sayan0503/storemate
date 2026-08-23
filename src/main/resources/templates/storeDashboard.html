@@ -292,7 +292,7 @@
 
 		                <p>
 		                    View your sales history here
-
+		                </p>
 		            </div>
 
 		            <a class="action-button"
@@ -300,7 +300,28 @@
 		                View Sale History
 		            </a>
 
-		        </div>
+		 </div>
+		 
+		 <div class="action-card">
+
+		 		    <div>
+
+			          <h2>
+		 	            Delete Store
+		 	          </h2>
+
+		 		       <p>
+		 		          Delete your store.
+						  Please make this decision very carefully
+						  as every product, analytics and hustory will be deleted 
+		 		       </p>
+		 		    </div>
+
+		 		    <a class="action-button" style="color:red"
+		 	           th:href="@{/store/{id}/delete(id=${store.id})}">
+		                Delete
+		 		    </a>
+		 </div>
 
     </div>
 

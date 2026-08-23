@@ -368,16 +368,16 @@
 
                 <tbody>
 
-                    <tr th:each="item : ${analytics.topProducts}">
+                    <tr th:each="product : ${topProducts}">
 
                         <td class="product-name"
-                            th:text="${item.product.name}">
+                            th:text="${product.productName}">
 
                             Product
 
                         </td>
 
-                        <td th:text="${item.quantity}">
+                        <td th:text="${product.totalQty}">
 
                             0
 
@@ -386,7 +386,7 @@
                         <td class="amount">
 
                             ₹<span
-                                th:text="${item.subTotal}">
+	                                th:text="${product.revenue}">
                                 0.00
                             </span>
 

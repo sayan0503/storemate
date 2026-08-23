@@ -31,4 +31,6 @@ public interface SaleItemsRepository extends JpaRepository<SaleItems, Long>{
 	        ORDER BY SUM(si.quantity) DESC
 			""")
 	List<TopSellingProduct> findTopSellingProducts(@Param("store") Stores store);
+	
+	void deleteBySaleId(Long id);
 }

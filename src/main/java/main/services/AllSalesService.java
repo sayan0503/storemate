@@ -9,7 +9,7 @@ import main.entity.Stores;
 
 public interface AllSalesService {
 
-	public boolean completeSell(Stores s, List<SaleProductRequest> list );
+	public boolean completeSell(Stores s, List<SaleProductRequest> list ) throws Throwable;
 	public List<Sales> getAllSales(Stores s);
 	public Sales getSaleById(Long id);
 	public List<SaleItems> getAllSalesItems(Sales sale);

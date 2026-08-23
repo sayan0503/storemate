@@ -81,7 +81,7 @@ public class SalesController {
 	
 	@PostMapping("/store/{storeId}/sell")
 	@ResponseBody
-	public String completeSale(@PathVariable long storeId, @RequestBody SaleRequest request, HttpServletRequest req) {
+	public String completeSale(@PathVariable long storeId, @RequestBody SaleRequest request, HttpServletRequest req) throws Throwable {
 		
 		HttpSession session = req.getSession(false);
 		

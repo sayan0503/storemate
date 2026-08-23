@@ -60,4 +60,25 @@ public class StoreController {
 		model.addAttribute("store", s);
 		return "storeDashboard";
 	}
+	
+	@GetMapping("/store/{id}/deletestore")
+	public String deleteStore(@PathVariable long id, Model model, HttpServletRequest req) {
+		
+		HttpSession session = req.getSession(false);
+		if(session==null) {
+			return "redirect:/goLogin";
+		}
+		
+		User u = (User)session.getAttribute("user");
+		if(u==null) {
+			return "redirect:/goLogin";
+		}
+		
+		Stores s = service.getStoresbyId(id);
+		boolean status = service.deleteStore(s);
+		if(status) {
+			return "redirect:/dashboard";
+		}
+		return "storeDashboard";
+	}
 }

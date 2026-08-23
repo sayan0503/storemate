@@ -14,4 +14,7 @@ public interface SalesRepository extends JpaRepository<Sales, Long>{
 	List<Sales> findAllByStoreIdOrderBySaleDateDesc(Long id);
 	
 	long countByStoreId(Long storeId);
+	
+	List<Sales> findAllByStoreId(Long id);
+	void deleteAllByStoreId(long id);
 }

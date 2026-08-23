@@ -33,7 +33,7 @@ public class SalesServiceAccess implements AllSalesService{
 
 	@Override
 	@Transactional
-	public boolean completeSell(Stores store, List<SaleProductRequest> products) {
+	public boolean completeSell(Stores store, List<SaleProductRequest> products) throws Throwable {
 		
 			Sales sale = new Sales();
 			sale.setStore(store);
@@ -44,7 +44,7 @@ public class SalesServiceAccess implements AllSalesService{
 			BigDecimal total = BigDecimal.ZERO;
 			
 			for(SaleProductRequest request: products) {
-				Products p = productRepo.findById(request.getProductId()).orElseThrow(() -> new RuntimeException("Product not found"));
+				Products p = (Products) productRepo.findById(request.getProductId()).orElseThrow(() -> new RuntimeException("Product not found"));
 				int quantity = request.getQuantity();
 				
 				if(quantity <= 0) {

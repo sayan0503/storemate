@@ -49,7 +49,7 @@ public class ProductServiceAccess implements ProductService{
 
 	@Override
 	public Products getProducts(Long id) {
-		return repo.findById(id).orElse(null);
+		return (Products) repo.findById(id).orElse(null);
 	}
 
 	@Override

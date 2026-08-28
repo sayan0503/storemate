@@ -1,6 +1,8 @@
 package main.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,7 @@ import jakarta.servlet.http.HttpSession;
 import main.entity.Products;
 import main.entity.Stores;
 import main.entity.User;
+import main.repositories.SaleItemsRepository;
 import main.services.ProductService;
 import main.services.StoreService;
 
@@ -19,10 +22,13 @@ import main.services.StoreService;
 public class DashboardController {
 
 	@Autowired
-	StoreService storeService;
+	private StoreService storeService;
 	
 	@Autowired
-	ProductService productService;
+	private ProductService productService;
+	
+	@Autowired
+	private SaleItemsRepository itemRepo;
 	
 	@GetMapping("/dashboard")
 	public String dashboard(Model model, HttpServletRequest req) {
@@ -36,7 +42,41 @@ public class DashboardController {
 		List<Products> products = productService.getAll();
 		model.addAttribute("stores", stores);
 		model.addAttribute("products", products);
+		
 		return "dashboard";
+	}
+	
+	@GetMapping("/allInventory")
+	public String allInventory(Model model, HttpServletRequest req) {
+		HttpSession session = req.getSession(false);
+		User u = (User)session.getAttribute("user");
+		if(u==null) {
+			return "redirect:/goLogin";
+		}
+		
+		List<Stores> stores = storeService.allStores(u);
+		
+		Map<Long, Long> soldQty = new HashMap<>();
+		Map<Long, List<Products>> storeProducts = new HashMap<>();
+		
+		int totalProduct = 0;
+		for(Stores store: stores) {
+			
+			List<Products> products = productService.allProducts(store);
+			storeProducts.put(store.getId(), products);
+			totalProduct += products.size();
+		
+			for(Products product: products) {
+				Long sold = itemRepo.getTotalSoldByProduct(product.getId());
+				soldQty.put(product.getId(), sold);
+			}
+		}
+		model.addAttribute("soldQuantity", soldQty);
+		model.addAttribute("stores", stores);
+		model.addAttribute("storeProducts", storeProducts);
+		model.addAttribute("totalProducts", totalProduct);
+		
+		return "allInventory";
 	}
 	
 }

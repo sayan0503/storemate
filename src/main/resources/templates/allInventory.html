@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StoreMate - Dashboard</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #1f2937;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+
+        .sidebar {
+            width: 240px;
+            background: #111827;
+            color: white;
+            padding: 25px 18px;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            padding: 0 12px 35px;
+        }
+
+        .logo span {
+            font-weight: normal;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 13px 14px;
+            margin-bottom: 6px;
+            border-radius: 8px;
+            color: #d1d5db;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: #374151;
+            color: white;
+        }
+
+        /* Main */
+
+        .main {
+            flex: 1;
+        }
+
+        .topbar {
+            height: 72px;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 35px;
+        }
+
+		.topbar-user {
+		    display: flex;
+		    align-items: center;
+		    gap: 20px;
+		}
+
+		.user-name {
+		    font-weight: 600;
+			padding-right: 10px;
+		}
+
+		.logout-button {
+		    padding: 10px 16px;
+		    border: 1px solid #d1d5db;
+		    border-radius: 7px;
+		    background: white;
+		    color: #374151;
+		    font-size: 14px;
+		    font-weight: 600;
+		    cursor: pointer;
+		}
+
+		.logout-button:hover {
+		    background: #f3f4f6;
+		} 
+
+        .content {
+            padding: 35px;
+        }
+		
+		/* Inventory */
+
+		.inventory-section {
+		    margin-top: 35px;
+			gap: 20px;
+			padding: 20px;
+		}
+
+		.inventory-header {
+		    margin-bottom: 20px;
+		}
+
+		.inventory-header h2 {
+		    font-size: 22px;
+		}
+
+		.inventory-store {
+		    background: white;
+		    border: 1px solid #e5e7eb;
+		    border-radius: 12px;
+		    margin-bottom: 25px;
+		    overflow: hidden;
+		}
+
+		.inventory-store h3 {
+		    padding: 18px 22px;
+		    border-bottom: 1px solid #e5e7eb;
+		    font-size: 18px;
+		}
+
+		.inventory-table-wrapper {
+		    overflow-x: auto;
+		}
+
+		.inventory-table {
+		    width: 100%;
+		    border-collapse: collapse;
+		}
+
+		.inventory-table th,
+		.inventory-table td {
+		    padding: 15px 22px;
+		    text-align: left;
+		    border-bottom: 1px solid #f1f1f1;
+		}
+
+		.inventory-table th {
+		    background: #f9fafb;
+		    color: #6b7280;
+		    font-size: 13px;
+		    text-transform: uppercase;
+		}
+
+		.inventory-table td {
+		    font-size: 14px;
+		}
+
+		.inventory-table tbody tr:last-child td {
+		    border-bottom: none;
+		}
+
+		.no-inventory {
+		    text-align: center !important;
+		    color: #6b7280;
+		}
+
+        /* Responsive */
+
+        @media (max-width: 800px) {
+
+            .sidebar {
+                width: 190px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .content {
+                padding: 25px;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .sidebar {
+                display: none;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .topbar {
+                padding: 0 20px;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            Store<span>Mate</span>
+        </div>
+
+        <a href="/dashboard" class="nav-item">
+            Dashboard
+        </a>
+
+        <a href="/allInventory" class="nav-item active">
+            Inventory
+        </a>
+
+        <a href="#" class="nav-item">
+            Reports
+        </a>
+
+        <a href="#" class="nav-item">
+            Account
+        </a>
+
+    </aside>
+
+
+    <!-- Main -->
+
+    <main class="main">
+
+        <!-- Topbar -->
+
+        <header class="topbar">
+
+            <span class="user-name"
+                  th:text="${session.user.name}">
+                User
+            </span>
+			
+			<a href="/logout" class="logout-button">
+			    Logout
+			</a>
+
+        </header>
+		
+		<!-- Inventory -->
+
+		<div class="inventory-section">
+
+		    <div class="inventory-header">
+
+		        <h2>
+		            Inventory
+		        </h2>
+
+		    </div>
+
+
+		    <div th:if="${stores != null and !#lists.isEmpty(stores)}">
+
+		        <!-- Each Store -->
+
+		        <div class="inventory-store"
+		             th:each="store : ${stores}">
+
+		            <h3 th:text="${store.name}">
+		                Store Name
+		            </h3>
+
+
+		            <!-- Inventory Table -->
+
+		            <div class="inventory-table-wrapper">
+
+		                <table class="inventory-table">
+
+		                    <thead>
+
+		                        <tr>
+		                            <th>Inventory Name</th>
+		                            <th>Current Quantity</th>
+		                            <th>Sold</th>
+		                        </tr>
+
+		                    </thead>
+
+
+		                    <tbody>
+
+		                        <tr th:each="product : ${storeProducts[store.id]}">
+
+		                            <td th:text="${product.name}">
+		                                Product Name
+		                            </td>
+
+		                            <td th:text="${product.quantity}">
+		                                0
+		                            </td>
+
+		                            <td th:text="${soldQuantity[product.id]}">
+		                                0
+		                            </td>
+
+		                        </tr>
+
+
+		                        <!-- No Products -->
+
+		                        <tr th:if="${#lists.isEmpty(storeProducts[store.id])}">
+
+		                            <td colspan="3" class="no-inventory">
+		                                No inventory added to this store yet.
+		                            </td>
+
+		                        </tr>
+
+		                    </tbody>
+
+		                </table>
+
+		            </div>
+
+		        </div>
+
+		    </div>
+
+		</div>
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

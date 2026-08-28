@@ -33,4 +33,11 @@ public interface SaleItemsRepository extends JpaRepository<SaleItems, Long>{
 	List<TopSellingProduct> findTopSellingProducts(@Param("store") Stores store);
 	
 	void deleteBySaleId(Long id);
+	
+	@Query("""
+			SELECT COALESCE(SUM(si.quantity),0)
+			FROM SaleItems si
+			WHERE si.product.id=:productId
+			""")
+	Long getTotalSoldByProduct(@Param("productId") Long productId);
 }

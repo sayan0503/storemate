@@ -6,4 +6,5 @@ public interface UserService{
 
 	public boolean register(User u);
 	public User login(String email, String password);
+	public boolean update(User u);
 }

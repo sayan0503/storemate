@@ -42,7 +42,16 @@ public class UserServiceAccess implements UserService{
 			return null;
 		}
 	}
-	
-	
+
+	@Override
+	public boolean update(User u) {
+		try{
+			repo.save(u);
+			return true;
+		}catch(Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 
 }

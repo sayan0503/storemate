@@ -315,14 +315,12 @@
                     Update Account
                 </button>
 				
-				<button type="submit"
-				        class="update-button">
-				    Update Password
+				<button class="update-button">
+				    <a th:href="@{/user/{id}/updatepassword(id=${session.user.id})}">Update Password</a>
 				</button>
 				
-				<button type="submit"
-				        class="update-button" style="color:red">
-				    Delete Account
+				<button class="update-button" style="color:red">
+				    <a th:href="@{/user/{id}/deleteuser(id=${session.user.id})}">Delete Account</a>
 				</button>
 				
             </form>

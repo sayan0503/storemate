@@ -82,14 +82,36 @@ public class UserController {
 		return "redirect:/goLogin";
 	}
 	
-	@GetMapping("/user/{id}/profile")
-	public String profile(Model model, HttpServletRequest req, @PathVariable Long id) {
+	
+	@GetMapping("/user/{id}")
+	public String reports(Model model, HttpServletRequest req, @PathVariable Long id ) {
 		HttpSession session = req.getSession(false);
 		User u = (User)session.getAttribute("user");
 		if(u==null) {
 			return "redirect:/goLogin";
 		}
 		
-		return "";
+		model.addAttribute("user", u);
+		return "accountDashboard";
+	}
+	
+	
+	@PostMapping("/user/{id}/update")
+	public String profile(Model model, HttpServletRequest req, @PathVariable Long id, @ModelAttribute("user") User user) {
+		HttpSession session = req.getSession(false);
+		User u = (User)session.getAttribute("user");
+		if(u==null) {
+			return "redirect:/goLogin";
+		}
+		u.setName(user.getName());
+		u.setEmail(user.getEmail());
+		boolean status = service.update(u);
+		if(status) {
+			return "accountDashboard";
+		}
+		else {
+			model.addAttribute("error", "Updatation Failed!");
+			return "accountDashboard";
+		}
 	}
 }

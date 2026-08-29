@@ -127,16 +127,4 @@ public class DashboardController {
 		
 		return "reports";
 	}
-	
-	@GetMapping("/user/{id}")
-	public String reports(Model model, HttpServletRequest req, @PathVariable Long id ) {
-		HttpSession session = req.getSession(false);
-		User u = (User)session.getAttribute("user");
-		if(u==null) {
-			return "redirect:/goLogin";
-		}
-		
-		model.addAttribute("user", u);
-		return "accountDashboard";
-	}
 }

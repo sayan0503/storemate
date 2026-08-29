@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -79,5 +80,16 @@ public class UserController {
 			session.invalidate();
 		}
 		return "redirect:/goLogin";
+	}
+	
+	@GetMapping("/user/{id}/profile")
+	public String profile(Model model, HttpServletRequest req, @PathVariable Long id) {
+		HttpSession session = req.getSession(false);
+		User u = (User)session.getAttribute("user");
+		if(u==null) {
+			return "redirect:/goLogin";
+		}
+		
+		return "";
 	}
 }

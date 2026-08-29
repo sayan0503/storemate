@@ -237,9 +237,13 @@
             Reports
         </a>
 
-        <a href="#" class="nav-item">
-            Account
-        </a>
+		<a th:href="@{/user/{id}(id=${session.user.id})}" class="nav-item">
+		    Account
+		</a>
+				
+		<a href="#" class="nav-item">
+			About Us
+		</a>
 
     </aside>
 

@@ -272,9 +272,13 @@
             Reports
         </a>
 
-        <a href="#" class="nav-item">
-            Account
-        </a>
+		<a th:href="@{/user/{id}(id=${session.user.id})}" class="nav-item">
+		    Account
+		</a>
+				
+		<a href="#" class="nav-item">
+			About Us
+		</a>
 
     </aside>
 
@@ -282,6 +286,21 @@
     <!-- Main -->
 
     <main class="main">
+		
+		<!-- Topbar -->
+
+		       <header class="topbar">
+
+		           <span class="user-name"
+		                 th:text="${session.user.name}">
+		               User
+		           </span>
+				
+				<a href="/logout" class="logout-button">
+				    Logout
+				</a>
+
+		       </header>
 		
 		<!-- Reports -->
 

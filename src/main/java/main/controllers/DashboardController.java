@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -125,5 +126,17 @@ public class DashboardController {
 		model.addAttribute("stores", stores);
 		
 		return "reports";
+	}
+	
+	@GetMapping("/user/{id}")
+	public String reports(Model model, HttpServletRequest req, @PathVariable Long id ) {
+		HttpSession session = req.getSession(false);
+		User u = (User)session.getAttribute("user");
+		if(u==null) {
+			return "redirect:/goLogin";
+		}
+		
+		model.addAttribute("user", u);
+		return "accountDashboard";
 	}
 }

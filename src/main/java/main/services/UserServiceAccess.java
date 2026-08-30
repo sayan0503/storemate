@@ -22,8 +22,7 @@ public class UserServiceAccess implements UserService{
 			String encodedPassword = encoder.encode(u.getPassword());
 			u.setPassword(encodedPassword);
 			repo.save(u);
-			// 1 - 12345
-			// 2 - password
+			// 2 - 12345
 			// 3 - pass123
 			return true;
 		}catch(Exception e) {
@@ -50,6 +49,24 @@ public class UserServiceAccess implements UserService{
 			return true;
 		}catch(Exception e) {
 			e.printStackTrace();
+			return false;
+		}
+	}
+
+	@Override
+	public boolean updatePassword(User u, String currentPassword) {
+		User user = login(u.getEmail(), currentPassword);
+		if(user!=null) {
+			try {
+				String endcodedPass= encoder.encode(u.getPassword());
+				u.setPassword(endcodedPass);
+				repo.save(u);
+				return true;
+			}catch(Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+		}else {
 			return false;
 		}
 	}

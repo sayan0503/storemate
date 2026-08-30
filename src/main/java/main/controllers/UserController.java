@@ -84,7 +84,7 @@ public class UserController {
 	
 	
 	@GetMapping("/user/{id}")
-	public String reports(Model model, HttpServletRequest req, @PathVariable Long id ) {
+	public String profilepage(Model model, HttpServletRequest req, @PathVariable Long id ) {
 		HttpSession session = req.getSession(false);
 		User u = (User)session.getAttribute("user");
 		if(u==null) {
@@ -112,6 +112,42 @@ public class UserController {
 		else {
 			model.addAttribute("error", "Updatation Failed!");
 			return "accountDashboard";
+		}
+	}
+	
+	@GetMapping("/user/{id}/updatepassword")
+	public String updatepassword(Model model, HttpServletRequest req, @PathVariable Long id ) {
+		HttpSession session = req.getSession(false);
+		User u = (User)session.getAttribute("user");
+		if(u==null) {
+			return "redirect:/goLogin";
+		}
+		
+		model.addAttribute("User", u);
+		return "updatePassword";
+	}
+	
+	@PostMapping("/passwordUpdate")
+	public String passwordUpdated(Model model, HttpServletRequest req, @ModelAttribute("User") User user, @RequestParam("currentPassword") String currentPass, @RequestParam("confirmPassword") String confirmPass) {
+		HttpSession session = req.getSession(false);
+		User u = (User)session.getAttribute("user");
+		if(u==null) {
+			return "redirect:/goLogin";
+		}
+		
+		if(!user.getPassword().equals(confirmPass)) {
+			model.addAttribute("error", "password do not match");
+			return "updatePassword";
+		}else {
+			u.setPassword(user.getPassword());
+			boolean status = service.updatePassword(u, currentPass);
+			if(status) {
+				return "login";
+			}
+			else {
+				model.addAttribute("error", "Enter correct current password!");
+				return "updatePassword";
+			}
 		}
 	}
 }

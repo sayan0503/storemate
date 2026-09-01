@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import main.entity.User;
+import main.services.EmailService;
 import main.services.UserService;
 
 @Controller
@@ -19,6 +20,9 @@ public class UserController {
 
 	@Autowired
 	private UserService service;
+	
+	@Autowired
+	private EmailService emailService;
 	
 	@GetMapping("/GoRegister")
 	public String registerForm(Model model) {
@@ -37,6 +41,7 @@ public class UserController {
 			boolean status = service.register(u);
 			try {
 				if(status) {
+					emailService.sendRegistrationEmail(u.getEmail(), u.getName());
 					return "redirect:/goLogin";
 				}
 				else {
@@ -180,6 +185,10 @@ public class UserController {
 		}
 		boolean status = service.deleteUser(u);
 		if(status) {
+			String email = u.getEmail();
+			String name = u.getName();
+			emailService.sendDeletionEmail(email, name);
+			
 			if(session!=null) {
 				session.invalidate();
 				return "redirect:/goLogin";

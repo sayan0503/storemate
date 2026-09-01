@@ -13,4 +13,5 @@ public interface ProductService {
 	public List<Products> getAll();
 	public Products getProducts(Long id);
 	public boolean updateProduct(Products p);
+	public List<Products> getAllProductsFromAllStores(List<Stores> stores);
 }

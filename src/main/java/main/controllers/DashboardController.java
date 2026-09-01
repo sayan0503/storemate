@@ -43,7 +43,7 @@ public class DashboardController {
 		}
 		
 		List<Stores> stores = storeService.allStores(u);
-		List<Products> products = productService.getAll();
+		List<Products> products = productService.getAllProductsFromAllStores(stores);
 		model.addAttribute("stores", stores);
 		model.addAttribute("products", products);
 		

@@ -63,4 +63,9 @@ public class ProductServiceAccess implements ProductService{
 		}
 	}
 
+	@Override
+	public List<Products> getAllProductsFromAllStores(List<Stores> stores) {
+		return repo.findAllByStoreIn(stores);
+	}
+
 }

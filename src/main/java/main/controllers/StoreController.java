@@ -23,6 +23,10 @@ public class StoreController {
 	@GetMapping("/store/add")
 	public String addstorepage(Model model, HttpServletRequest req) {
 		HttpSession session = req.getSession(false);
+		if (session == null) {
+            return "redirect:/goLogin";
+        }
+		
 		User u = (User)session.getAttribute("user");
 		if(u==null) {
 			return "redirect:/goLogin";
@@ -34,6 +38,10 @@ public class StoreController {
 	@PostMapping("/store/add")
 	public String addstore(@ModelAttribute("store") Stores s, Model model, HttpServletRequest req) {
 		HttpSession session = req.getSession(false);
+		if (session == null) {
+            return "redirect:/goLogin";
+        }
+		
 		User u = (User)session.getAttribute("user");
 		if(u==null) {
 			return "redirect:/goLogin";
@@ -51,6 +59,10 @@ public class StoreController {
 	@GetMapping("/store/{id}")
 	public String storeDashboard(@PathVariable long id, Model model, HttpServletRequest req) {
 		HttpSession session = req.getSession(false);
+		if (session == null) {
+            return "redirect:/goLogin";
+        }
+		
 		User u = (User)session.getAttribute("user");
 		if(u==null) {
 			return "redirect:/goLogin";

@@ -39,6 +39,10 @@ public class SalesController {
 	public String sellPage(@PathVariable Long id, Model model, HttpServletRequest req) {
 		
 		HttpSession session = req.getSession(false);
+		if (session == null) {
+            return "redirect:/goLogin";
+        }
+		
 		User u = (User) session.getAttribute("user");
 		if(u == null) {
 			return "redirect:/goLogin";
@@ -113,6 +117,10 @@ public class SalesController {
 	@GetMapping("/store/{id}/sales")
 	public String salesHistory(@PathVariable Long id, Model model, HttpServletRequest req) {
 		HttpSession session = req.getSession(false);
+		if (session == null) {
+            return "redirect:/goLogin";
+        }
+		
 		User u = (User) session.getAttribute("user");
 		if(u == null) {
 			return "redirect:/goLogin";
@@ -135,6 +143,10 @@ public class SalesController {
 	public String salesHistoryDetails(@PathVariable Long storeId, @PathVariable Long saleId, Model model, HttpServletRequest req) {
 		
 		HttpSession session = req.getSession(false);
+		if (session == null) {
+            return "redirect:/goLogin";
+        }
+		
 		User u = (User) session.getAttribute("user");
 		if(u == null) {
 			return "redirect:/goLogin";

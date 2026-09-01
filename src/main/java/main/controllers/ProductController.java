@@ -34,6 +34,10 @@ public class ProductController {
 	public String inventory(@PathVariable long id, Model model, HttpServletRequest req) {
 		
 		HttpSession session = req.getSession(false);
+		if (session == null) {
+            return "redirect:/goLogin";
+        }
+		
 		User u = (User)session.getAttribute("user");
 		if(u==null) {
 			return "redirect:/goLogin";
@@ -49,6 +53,10 @@ public class ProductController {
 	public String addProductPage(@PathVariable long id, Model model, HttpServletRequest req) {
 		
 		HttpSession session = req.getSession(false);
+		if (session == null) {
+            return "redirect:/goLogin";
+        }
+		
 		User u = (User)session.getAttribute("user");
 		if(u==null) {
 			return "redirect:/goLogin";
@@ -63,6 +71,10 @@ public class ProductController {
 	public String addProduct(@PathVariable long id, @ModelAttribute("product") Products p, Model model, HttpServletRequest req) {
 		
 		HttpSession session = req.getSession(false);
+		if (session == null) {
+            return "redirect:/goLogin";
+        }
+		
 		User u = (User)session.getAttribute("user");
 		if(u==null) {
 			return "redirect:/goLogin";
@@ -89,6 +101,10 @@ public class ProductController {
 	@GetMapping("/store/{storeId}/inventory/delete/{productId}")
 	public String delete(Model model, HttpServletRequest req, @PathVariable Long productId, @PathVariable long storeId) {
 		HttpSession session = req.getSession(false);
+		if (session == null) {
+            return "redirect:/goLogin";
+        }
+		
 		User u = (User)session.getAttribute("user");
 		if(u==null) {
 			return "redirect:/goLogin";
@@ -106,6 +122,10 @@ public class ProductController {
 	@GetMapping("/store/{storeId}/inventory/edit/{productId}")
 	public String editpage(Model model, HttpServletRequest req, @PathVariable Long productId, @PathVariable long storeId) {
 		HttpSession session = req.getSession(false);
+		if (session == null) {
+            return "redirect:/goLogin";
+        }
+		
 		User u = (User)session.getAttribute("user");
 		if(u==null) {
 			return "redirect:/goLogin";
@@ -122,6 +142,10 @@ public class ProductController {
 	@PostMapping("/store/{storeId}/inventory/edit/{productId}")
 	public String edit(Model model, HttpServletRequest req, @PathVariable Long productId, @PathVariable long storeId, @ModelAttribute("product") Products p) {
 		HttpSession session = req.getSession(false);
+		if (session == null) {
+            return "redirect:/goLogin";
+        }
+		
 		User u = (User)session.getAttribute("user");
 		if(u==null) {
 			return "redirect:/goLogin";

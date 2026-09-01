@@ -37,6 +37,11 @@ public class DashboardController {
 	@GetMapping("/dashboard")
 	public String dashboard(Model model, HttpServletRequest req) {
 		HttpSession session = req.getSession(false);
+		
+		if (session == null) {
+            return "redirect:/goLogin";
+        }
+		
 		User u = (User)session.getAttribute("user");
 		if(u==null) {
 			return "redirect:/goLogin";
@@ -53,6 +58,11 @@ public class DashboardController {
 	@GetMapping("/allInventory")
 	public String allInventory(Model model, HttpServletRequest req) {
 		HttpSession session = req.getSession(false);
+		
+		if (session == null) {
+            return "redirect:/goLogin";
+        }
+		
 		User u = (User)session.getAttribute("user");
 		if(u==null) {
 			return "redirect:/goLogin";
@@ -86,6 +96,11 @@ public class DashboardController {
 	@GetMapping("/reports")
 	public String reports(Model model, HttpServletRequest req) {
 		HttpSession session = req.getSession(false);
+		
+		if (session == null) {
+            return "redirect:/goLogin";
+        }
+		
 		User u = (User)session.getAttribute("user");
 		if(u==null) {
 			return "redirect:/goLogin";
@@ -126,5 +141,21 @@ public class DashboardController {
 		model.addAttribute("stores", stores);
 		
 		return "reports";
+	}
+	
+	@GetMapping("/aboutus")
+	public String aboutUs(Model model, HttpServletRequest req) {
+		HttpSession session = req.getSession(false);
+		
+		if (session == null) {
+            return "redirect:/goLogin";
+        }
+		
+		User u = (User)session.getAttribute("user");
+		if(u==null) {
+			return "redirect:/goLogin";
+		}
+		
+		return "aboutus";
 	}
 }

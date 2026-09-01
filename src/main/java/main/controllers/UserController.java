@@ -86,6 +86,10 @@ public class UserController {
 	@GetMapping("/user/{id}")
 	public String profilepage(Model model, HttpServletRequest req, @PathVariable Long id ) {
 		HttpSession session = req.getSession(false);
+		if (session == null) {
+            return "redirect:/goLogin";
+        }
+		
 		User u = (User)session.getAttribute("user");
 		if(u==null) {
 			return "redirect:/goLogin";
@@ -99,6 +103,10 @@ public class UserController {
 	@PostMapping("/user/{id}/update")
 	public String profile(Model model, HttpServletRequest req, @PathVariable Long id, @ModelAttribute("user") User user) {
 		HttpSession session = req.getSession(false);
+		if (session == null) {
+            return "redirect:/goLogin";
+        }
+		
 		User u = (User)session.getAttribute("user");
 		if(u==null) {
 			return "redirect:/goLogin";
@@ -118,6 +126,10 @@ public class UserController {
 	@GetMapping("/user/{id}/updatepassword")
 	public String updatepassword(Model model, HttpServletRequest req, @PathVariable Long id ) {
 		HttpSession session = req.getSession(false);
+		if (session == null) {
+            return "redirect:/goLogin";
+        }
+		
 		User u = (User)session.getAttribute("user");
 		if(u==null) {
 			return "redirect:/goLogin";
@@ -130,6 +142,10 @@ public class UserController {
 	@PostMapping("/passwordUpdate")
 	public String passwordUpdated(Model model, HttpServletRequest req, @ModelAttribute("User") User user, @RequestParam("currentPassword") String currentPass, @RequestParam("confirmPassword") String confirmPass) {
 		HttpSession session = req.getSession(false);
+		if (session == null) {
+            return "redirect:/goLogin";
+        }
+		
 		User u = (User)session.getAttribute("user");
 		if(u==null) {
 			return "redirect:/goLogin";
@@ -154,6 +170,10 @@ public class UserController {
 	@GetMapping("/user/{id}/deleteuser")
 	public String deleteUser(Model model, HttpServletRequest req, @PathVariable Long id ) {
 		HttpSession session = req.getSession(false);
+		if (session == null) {
+            return "redirect:/goLogin";
+        }
+		
 		User u = (User)session.getAttribute("user");
 		if(u==null) {
 			return "redirect:/goLogin";

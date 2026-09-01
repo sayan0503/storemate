@@ -41,7 +41,7 @@ public class UserController {
 			boolean status = service.register(u);
 			try {
 				if(status) {
-					emailService.sendRegistrationEmail(u.getEmail(), u.getName());
+					//emailService.sendRegistrationEmail(u.getEmail(), u.getName());
 					return "redirect:/goLogin";
 				}
 				else {
@@ -185,9 +185,9 @@ public class UserController {
 		}
 		boolean status = service.deleteUser(u);
 		if(status) {
-			String email = u.getEmail();
+			/*String email = u.getEmail();
 			String name = u.getName();
-			emailService.sendDeletionEmail(email, name);
+			emailService.sendDeletionEmail(email, name);*/
 			
 			if(session!=null) {
 				session.invalidate();

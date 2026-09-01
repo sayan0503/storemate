@@ -1,10 +1,19 @@
 package main.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import main.entity.Sales;
+import main.entity.Stores;
 import main.entity.User;
+import main.repositories.ProductRepository;
+import main.repositories.SaleItemsRepository;
+import main.repositories.SalesRepository;
+import main.repositories.StoreRepository;
 import main.repositories.UserRepository;
 
 @Service
@@ -12,6 +21,18 @@ public class UserServiceAccess implements UserService{
 
 	@Autowired
 	private UserRepository repo;
+	
+	@Autowired
+	private ProductRepository productRepo;
+	
+	@Autowired
+	private SalesRepository saleRepo;
+	
+	@Autowired
+	private SaleItemsRepository itemRepo;
+	
+	@Autowired
+	private StoreRepository storeRepo;
 	
 	@Autowired
 	private PasswordEncoder encoder;
@@ -67,6 +88,28 @@ public class UserServiceAccess implements UserService{
 				return false;
 			}
 		}else {
+			return false;
+		}
+	}
+
+	@Override
+	@Transactional
+	public boolean deleteUser(User user) {
+		try{
+			List<Stores> stores = storeRepo.findAllByUser(user);
+			for(Stores store: stores) {
+				productRepo.deleteAllByStoreId(store.getId());
+				List<Sales> sales = saleRepo.findAllByStoreId(store.getId());
+				for(Sales sale: sales) {
+					itemRepo.deleteBySaleId(sale.getId());
+				}
+				saleRepo.deleteAllByStoreId(store.getId());
+				storeRepo.deleteById(store.getId());
+			}
+			repo.delete(user);
+			return true;
+		}catch(Exception e){
+			e.printStackTrace();
 			return false;
 		}
 	}

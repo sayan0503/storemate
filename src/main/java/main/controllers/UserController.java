@@ -150,4 +150,22 @@ public class UserController {
 			}
 		}
 	}
+	
+	@GetMapping("/user/{id}/deleteuser")
+	public String deleteUser(Model model, HttpServletRequest req, @PathVariable Long id ) {
+		HttpSession session = req.getSession(false);
+		User u = (User)session.getAttribute("user");
+		if(u==null) {
+			return "redirect:/goLogin";
+		}
+		boolean status = service.deleteUser(u);
+		if(status) {
+			if(session!=null) {
+				session.invalidate();
+				return "redirect:/goLogin";
+			}
+		}
+		model.addAttribute("error", "An error occured while deleting account");
+		return "accountDashboard";
+	}
 }

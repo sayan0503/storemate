@@ -8,4 +8,5 @@ public interface UserService{
 	public User login(String email, String password);
 	public boolean update(User u);
 	public boolean updatePassword(User u, String currentPassword);
+	public boolean deleteUser(User user);
 }
